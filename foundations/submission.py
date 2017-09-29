@@ -86,9 +86,12 @@ def incrementSparseVector(v1, scale, v2):
     """
     # BEGIN_YOUR_CODE (our solution is 2 lines of code, but don't worry if you deviate from this)
     v1_int_v2 = list(set(v1.keys()).intersection(set(v2.keys()))) #get intersection of keys
+    not_int = list(set(v1_int_v2) - set(v2.keys())) #not in intersection 
+    if not not_int:  not_int = list(set(v2.keys())-set(v1_int_v2))
     for k in v2.keys(): v2[k] = scale*v2[k]
     for e in v1_int_v2: v1[e] = v1[e]+v2[e]
-    return collections.defaultdict(float,v2,**v1)
+    for e in not_int: v1[e] = v2[e]
+
     # END_YOUR_CODE
 
 ############################################################
