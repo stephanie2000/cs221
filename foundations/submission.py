@@ -101,7 +101,17 @@ def findSingletonWords(text):
     You might find it useful to use collections.defaultdict(int).
     """
     # BEGIN_YOUR_CODE (our solution is 4 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    d = collections.defaultdict(int)
+    for w in text.split():
+        if w in d.keys():
+            d[w]+=1
+        if w not in d.keys():
+            d[w] = 1
+        if d[w] > 1:
+            d.pop(w)
+
+    return set(d.keys())
+
     # END_YOUR_CODE
 
 ############################################################
