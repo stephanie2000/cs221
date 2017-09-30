@@ -39,38 +39,44 @@ for i in range(len(words)-1):
     keys.append(words[i])
     pairs.append(pair)
 
-
 s = set()
 n=len(words)
 
 def addWords(pairs,text,i,n,keys):
     first = pairs[i][0]
     last = pairs[i][1]
-    text = list()
+    #text = list()
     indices = [j for j,x in enumerate(keys) if x ==last]#find location of next pair
 
-    if len(text) == n: return text
+    if len(text) == n: return text #if we are at length of sentence we are done
 
     text.append(first)
     if indices: 
-        for j in indices:
-           temp = list()
-           temp = text
-           temp2 = addWords(pairs,temp,j,n,keys)
-           sentences.append(temp2)
-    elif not indices and len(text) == n - 2: 
+        temp = list()
+        for j in indices: #make a copy of the current sentence,before branching off 2 othr pairs
+           temp = copy.copy(text)
+           temp2 = addWords(pairs,text,j,n,keys)
+           sentences.add(tuple(text))
+           text = temp #return to copy of the sentence before it was completed
+    elif not indices and len(text) == n - 1: 
         text.append(last)
         return text
     else:
-        return 0
+        text = list()
+        return text
    
         
-sentences = list()
+sentences = set()
 for i,pair in enumerate(pairs):
-    
+    w = list()
+    addWords(pairs,w,i,n,keys)
+
 
 #print s
-
+sentences = [' '.join(map(str,list(x))) for x in sentences if len(x) == n ]
+#for s in sentences:
+#   print s
+#print type(sentences)
 #need to keep entire dictionary-and start at index i in dict in recursive call
 #how to add mouse if its not seen in another key?
     
