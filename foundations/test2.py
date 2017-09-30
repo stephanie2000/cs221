@@ -27,7 +27,58 @@ import copy
 #2. there are n - 1 pairs of words
 #3. the end of one pair must be equal to the start of another pair-follows 4.
 #4. words in the second spot of the pairs that do not appear as keys in the dict have to go at the end of the sentence - if it needs to make n words
-#sentence = 'the cat and the mouse'
+sentence = 'the cat and the mouse'
+
+words = sentence.split()
+
+pairs = list()
+for i in range(len(words)-1):
+    pair = [words[i],words[i+1]]
+    pairs.append(pair)
+
+print pairs
+
+
+
+sentence = 'a a a a a'
+words = sentence.split()
+
+#make a dictionary of adjacent words
+d = dict()
+for i in range(len(words)-1):
+    if words[i] not in d.keys():
+        d[words[i]] = list()
+    if words[i] in d.keys():
+        d[words[i]].append(words[i+1])
+
+
+print d
+s = set()
+n=len(words)
+
+def addWords(d,text,k,n):
+
+    if len(text)==n:
+        return text
+
+    for l in d[k]:  #go through each pair per key
+        if l not in d.keys() and text == n-1:
+            text.append(l)
+            return text
+        if l in d.keys(): #if the value of the key is also a key, jump to it
+            text.append(k) #add the current key 
+            addWords(d,text,l,n)
+        
+
+for i,k in enumerate(d):
+    text=list()
+    #test= addWords(d,text,k,n)
+    s.add(tuple(text))
+    print text
+
+
+print list(s)
+###################33
 sentence = 'the cat and the mouse'
 words = sentence.split()
 
@@ -46,38 +97,25 @@ n=len(words)
 def addWords(pairs,text,i,n,keys):
     first = pairs[i][0]
     last = pairs[i][1]
-    text = list()
-    indices = [j for j,x in enumerate(keys) if x ==last]#find location of next pair
-
-    if len(text) == n: return text
-
-    text.append(first)
-    if indices: 
-        for j in indices:
-           temp = list()
-           temp = text
-           temp2 = addWords(pairs,temp,j,n,keys)
-           sentences.append(temp2)
-    elif not indices and len(text) == n - 2: 
+    if len(text)==n:
+        return text
+    elif last not in keys and len(text) == n-1:
         text.append(last)
         return text
+    elif len(text)==n-1:
+        return text.append(first)
+    elif last in keys: #if the value of the key is also a key, jump to it
+        text.append(first) #add the current key
+        indices = [j for j,x in enumerate(keys) if x==last]#find location of next pair
+        for j in indices:        
+            return addWords(pairs,text,j,n,keys)
     else:
-        return 0
-   
+        return 0 #no sentence was formed (dead end)
         
-sentences = list()
+
 for i,pair in enumerate(pairs):
-    
-
-#print s
-
-#need to keep entire dictionary-and start at index i in dict in recursive call
-#how to add mouse if its not seen in another key?
-    
-
-
-
-#RETURN A LIST FROM SET
-
-
+    text = list()
+    addWords(pairs,text,i,n,keys)
+    s.add(tuple(text))
+    print text
 
