@@ -52,7 +52,68 @@ def mutateSentences(sentence):
                 (reordered versions of this list are allowed)
     """
     # BEGIN_YOUR_CODE (our solution is 20 lines of code, but don't worry if you deviate from this)
-    
+
+
+    #NOTE: we form the sentence by ensuring the last part of a pair of words is the first
+    #      part of another pair of words
+
+    # Takes in a list of pairs of words and returns a list that forms a sentence (similar)
+    #
+    # @param[in] pairs    Is a list containing a list of paired words.    
+    # @param[in] text     Is a list containing words.
+    # @param[in] i        An index to access next pair of words that follow last pair added.
+    # @param[in] n        Length of original set of words in the original sentence.
+    # @param[in] keys     A list containg the first part of all pairs of words.
+    #
+    # @return
+    #
+    # @pre @a pairs is a list of lists (pairs of words).
+    # @pre @a i is an int.
+    # @pre @a keys is a list.  
+    #     
+    def addWords(pairs,text,i,n,keys):
+        first = pairs[i][0]
+        last = pairs[i][1]
+        indices = [j for j,x in enumerate(keys) if x ==last]#find location of next pair
+
+        if len(text) == n: return text #if we are at length of sentence we are done
+
+        text.append(first)
+        if indices: 
+            temp = list()
+            for j in indices: #make a copy of the current sentence,before branching off 2 othr pairs
+               temp = [t for t in text]
+               temp2 = addWords(pairs,text,j,n,keys)
+               sentences.add(tuple(text))
+               text = temp #return to copy of the sentence before it was completed
+        elif not indices and len(text) == n - 1: 
+            text.append(last)
+            sentences.add(tuple(text)) 
+            return text
+        else:
+            text = list()
+            return text
+   
+    words = sentence.split() #split the string
+
+    #make pairs of words (adjacent)
+    pairs = list()   
+    keys = list() #hold on to first half of pairs
+    for i in range(len(words)-1):
+        pair = [words[i],words[i+1]]
+        keys.append(words[i])
+        pairs.append(pair)
+
+    n=len(words)
+        
+    sentences = set()
+    for i,pair in enumerate(pairs): #create sent. for each pair in orig sent. 
+        w = list()
+        addWords(pairs,w,i,n,keys) #use recursion
+
+    #get rid of any short sentences that made it
+    sentences = [' '.join(map(str,list(x))) for x in sentences if len(x) == n ]
+    return sentences
     # END_YOUR_CODE
 
 ############################################################

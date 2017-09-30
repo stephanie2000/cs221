@@ -39,7 +39,7 @@ for i in range(len(words)-1):
     keys.append(words[i])
     pairs.append(pair)
 
-s = set()
+
 n=len(words)
 
 def addWords(pairs,text,i,n,keys):
@@ -74,8 +74,8 @@ for i,pair in enumerate(pairs):
 
 #print s
 sentences = [' '.join(map(str,list(x))) for x in sentences if len(x) == n ]
-#for s in sentences:
-#   print s
+for s in sentences:
+   print s
 #print type(sentences)
 #need to keep entire dictionary-and start at index i in dict in recursive call
 #how to add mouse if its not seen in another key?
