@@ -37,12 +37,13 @@ def computePalindrome(c,lst):
         iterLen = mid - 1 #how many times to remove until we hit middle 
         for it in range(iterLen):
             if sublst != sublst[::-1]:
-                sublst.remove(sublst[1])
-                sublst.remove(sublst[-2])
+                sublst.remove(sublst[1+it])
+                sublst.remove(sublst[-2+it])
                 
         return len(sublst)
 
- 
+   #else: 
+        
         
     
 
