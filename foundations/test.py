@@ -18,11 +18,11 @@ import random
 #text="a"
 #text="aa"
 #text="ab"
-text = "abcabaa"
+#text = "animal"
 
-#numChars = 3
-#length = 7
-#text=' '.join(chr(random.randint(ord('a'), ord('a') + numChars - 1)) for _ in range(length))
+numChars = 10
+length = 10
+text=' '.join(chr(random.randint(ord('a'), ord('a') + numChars - 1)) for _ in range(length))
 print text
 
 
@@ -41,40 +41,27 @@ def computePalindrome(c,lst,i):
         if len(sublst)==3 or len(sublst)==2:
             lengths.append(1)
             break
-        if len(sublst) % 2 == 1:
+        if len(sublst) % 2 == 1: #odd iteration
             mid = len(sublst)/2 #middle index
             iterLen = mid - 1 #how many times to remove until we hit middle 
-            for it in range(iterLen):
-                if sublst != sublst[::-1]:
-                    #check to see if it is still symmetric
-                    if sublst[1+it] != sublst[-2+it]:
-                        temp = list()
-                        temp = [x for x in sublst]
-                        temp.pop(1+it)
-			computePalindrome(temp,[len(temp)],0) # it is now an even case
-                        temp =  [x for x in sublst]
-                        temp.pop(-2-it)
-			computePalindrome(temp,[len(temp)],0) # it is now an even case
-                        sublst.pop(1+it)
-                        sublst.pop(-2-it)
+        else:
+            iterLen = (len(sublst)/2) - 1 
+        for it in range(iterLen):
+            if sublst != sublst[::-1]:
+                #check to see if it is still symmetric
+                if sublst[1+it] != sublst[-2+it]:
+                    temp = list()
+                    temp = [x for x in sublst]
+                    temp.pop(1+it)
+	            computePalindrome(temp,[len(temp)],0) # it is now an even case
+                    temp =  [x for x in sublst]
+                    temp.pop(-2-it)
+                    computePalindrome(temp,[len(temp)],0) # it is now an even case
+                    sublst.pop(1+it)
+                    sublst.pop(-2-it)
 
 
-            return 1
-        else: #even
-            iterLen = (len(sublst)/2) - 1
-            for it in range(iterLen):
-                if sublst != sublst[::-1]:
-                #check to see if moving inward pairs are equal
-                    if sublst[1+it] != sublst[-2+it]:
-                        temp = list()
-                        temp = [x for x in sublst]
-                        temp.pop(1+it) #remove 1 of them, it doesnt matter
-                        computePalindrome(temp,[len(temp)],0) # it is now an odd case
-                        temp = [x for x in sublst]
-                        temp.pop(-2-it)
-			computePalindrome(temp,[len(temp)],0) # it is now an odd case
-                        sublst.pop(1+it)
-                        sublst.pop(-2-it)
+
 
 def dups(t):
     #get all the duplicates in the string
