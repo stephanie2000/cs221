@@ -1,89 +1,76 @@
 import collections
 import math
 import random
-from itertools import permutations
-import copy
+
 
 """
-    Given a sentence (sequence of words), return a list of all "similar"
-    sentences.
-    We define a sentence to be similar to the original sentence if
-      - it as the same number of words, and
-      - each pair of adjacent words in the new sentence also occurs in the original sentence
-        (the words within each pair should appear in the same order in the output sentence
-         as they did in the orignal sentence.)
-    Notes:
-      - The order of the sentences you output doesn't matter.
-      - You must not output duplicates.
-      - Your generated sentence can use a word in the original sentence more than
-        once.
-    Example:
-      - Input: 'the cat and the mouse'
-      - Output: ['and the cat and the', 'the cat and the mouse', 'the cat and the cat', 'cat and the cat and']
-                (reordered versions of this list are allowed)
-    """
-
-#1. must have same amount of words, n = amnt of words
-#2. there are n - 1 pairs of words
-#3. the end of one pair must be equal to the start of another pair-follows 4.
-#4. words in the second spot of the pairs that do not appear as keys in the dict have to go at the end of the sentence - if it needs to make n words
-#sentence = 'the cat and the mouse'
-sentence = 'the cat and the mouse'
-words = sentence.split()
-
-#make pairs of words (adjacent)
-pairs = list()
-keys = list()
-for i in range(len(words)-1):
-    pair = [words[i],words[i+1]]
-    keys.append(words[i])
-    pairs.append(pair)
+    A palindrome is a string that is equal to its reverse (e.g., 'ana').
+    Compute the length of the longest palindrome that can be obtained by deleting
+    letters from |text|.
+    For example: the longest palindrome in 'animal' is 'ama'.
+    Your algorithm should run in O(len(text)^2) time.
+    You should first define a recurrence before you start coding.
+"""
 
 
-n=len(words)
 
-def addWords(pairs,text,i,n,keys):
-    first = pairs[i][0]
-    last = pairs[i][1]
-    #text = list()
-    indices = [j for j,x in enumerate(keys) if x ==last]#find location of next pair
+#text=""
+#text="a"
+#text="aa"
+#text="ab"
+text = "animal"
 
-    if len(text) == n: return text #if we are at length of sentence we are done
+#numChars = 2
+#length = 6
+#print ' '.join(chr(random.randint(ord('a'), ord('a') + numChars - 1)) for _ in range(length))
 
-    text.append(first)
-    if indices: 
-        temp = list()
-        for j in indices: #make a copy of the current sentence,before branching off 2 othr pairs
-           temp = copy.copy(text)
-           temp2 = addWords(pairs,text,j,n,keys)
-           sentences.add(tuple(text))
-           text = temp #return to copy of the sentence before it was completed
-    elif not indices and len(text) == n - 1: 
-        text.append(last)
-        return text
-    else:
-        text = list()
-        return text
-   
+
+
+def computePalindrome(c,lst):
+    
+    if len(lst) == 1: return 1
+
+    #decide if length of substring defined by lst is even or odd
+    sublst = c[lst[0]:lst[1]+1]
+    if len(sublst) % 2 == 1:
+        mid = len(sublst)/2 #middle index
+        iterLen = mid - 1 #how many times to remove until we hit middle 
+        for it in range(iterLen):
+            if sublst != sublst[::-1]:
+                sublst.remove(sublst[1])
+                sublst.remove(sublst[-2])
+                
+        return len(sublst)
+
+ 
         
-sentences = set()
-for i,pair in enumerate(pairs):
-    w = list()
-    addWords(pairs,w,i,n,keys)
-
-
-#print s
-sentences = [' '.join(map(str,list(x))) for x in sentences if len(x) == n ]
-for s in sentences:
-   print s
-#print type(sentences)
-#need to keep entire dictionary-and start at index i in dict in recursive call
-#how to add mouse if its not seen in another key?
     
 
+#get all the duplicates in the string
+chars = list(text)
+d = dict()
+for i,c in enumerate(chars):
+     if c not in d.keys():
+         d[c] = list()
+         d[c].append(i)
+     else:
+         d[c].append(i)
+temp = d
+for k in temp.keys():
+    if len(d[k]) == 1:
+        d.pop(k)
 
+#for each possible pairs of indices that chars are duplicates at-compute their palindrome
+#between these pairs
+#this is because palindromes need to be symmetric (have same beg. and end.)
+lengths = list()
+for k in d:
+    for l in range(len(d[k])-1):
+        i = d[k][l] #start of palindrome
+        j = d[k][l + 1] #end of palindrome
+        #compute palindrome for pair of indices
+        lenPal = computePalindrome(chars,list([i,j]))
+        lengths.append(lenPal)
 
-#RETURN A LIST FROM SET
-
-
-
+#then take max of lengths to get max palindrome
+print max(lengths)
