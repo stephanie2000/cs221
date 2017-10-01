@@ -20,10 +20,10 @@ import random
 #text="ab"
 text = "animal"
 
-#numChars = 2
-#length = 6
-#print ' '.join(chr(random.randint(ord('a'), ord('a') + numChars - 1)) for _ in range(length))
-
+numChars = 2
+length = 7
+text=' '.join(chr(random.randint(ord('a'), ord('a') + numChars - 1)) for _ in range(length))
+print text
 
 
 def computePalindrome(c,lst):
@@ -40,14 +40,22 @@ def computePalindrome(c,lst):
                 #check to see if it is still symmetric
                 if sublst[1+it] != sublst[-2+it]:
                     sublst.remove(sublst[1+it])
-                    sublst.remove(sublst[-2+it])
+                    sublst.remove(sublst[-2-it])
 
         return len(sublst)
 
-   #else: 
-        
-        
-    
+    else: #even
+        iterLen = (len(sublst)/2) - 1
+        for it in range(iterLen):
+            if sublst != sublst[::-1]:
+                #check to see if moving inward pairs are equal
+                if sublst[1+it] != sublst[-2+it]:
+                    sublst.remove(sublst[1+it])
+                    #print sublst, sublst[-2+it-1], it
+                    sublst.remove(sublst[-2-it])
+
+
+        return len(sublst)
 
 #get all the duplicates in the string
 chars = list(text)
