@@ -27,15 +27,14 @@ print text
 
 
 def computePalindrome(c,lst,i):
-                 
+    
     if len(c) == 0:
             lengths.append(0)
             return 1
     for l in range(len(lst)): #iterate through each pair starting from i
         #decide if length of substring defined by lst is even or odd
         sublst = c[i:lst[l]] #add an additional 1 due to list slicing
-       
-        
+        print sublst
         if sublst == sublst[::-1]:
             lengths.append(len(sublst))
             break
@@ -49,9 +48,17 @@ def computePalindrome(c,lst,i):
                 if sublst != sublst[::-1]:
                     #check to see if it is still symmetric
                     if sublst[1+it] != sublst[-2+it]:
-                        sublst.remove(sublst[1+it])
-			computePalindrome(sublst,[len(sublst)],0) # it is now an even case
-          
+                        temp = list()
+                        temp = [x for x in sublst]
+                        temp.pop(1+it)
+			computePalindrome(temp,[len(temp)],0) # it is now an even case
+                        temp =  [x for x in sublst]
+                        temp.pop(-2-it)
+			computePalindrome(temp,[len(temp)],0) # it is now an even case
+                        sublst.pop(1+it)
+                        sublst.pop(-2-it)
+
+
             return 1
         else: #even
             iterLen = (len(sublst)/2) - 1
@@ -59,9 +66,15 @@ def computePalindrome(c,lst,i):
                 if sublst != sublst[::-1]:
                 #check to see if moving inward pairs are equal
                     if sublst[1+it] != sublst[-2+it]:
-                        sublst.remove(sublst[1+it]) #remove 1 of them, it doesnt matter
-                        computePalindrome(sublst,[len(sublst)],0) # it is now an odd case
-
+                        temp = list()
+                        temp = [x for x in sublst]
+                        temp.pop(1+it) #remove 1 of them, it doesnt matter
+                        computePalindrome(temp,[len(temp)],0) # it is now an odd case
+                        temp = [x for x in sublst]
+                        temp.pop(-2-it)
+			computePalindrome(temp,[len(temp)],0) # it is now an odd case
+                        sublst.pop(1+it)
+                        sublst.pop(-2-it)
 
 def dups(t):
     #get all the duplicates in the string
@@ -88,7 +101,6 @@ lengths = list()
 
 for k in dupdict:
     for l in range(len(dupdict[k])-1):
-        print l,dupdict[k][(l+1):]
         temp = [x+1 for x in dupdict[k][(l+1):]]
         computePalindrome(chars,temp,dupdict[k][l])
 
