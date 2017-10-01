@@ -37,9 +37,11 @@ def computePalindrome(c,lst):
         iterLen = mid - 1 #how many times to remove until we hit middle 
         for it in range(iterLen):
             if sublst != sublst[::-1]:
-                sublst.remove(sublst[1+it])
-                sublst.remove(sublst[-2+it])
-                
+                #check to see if it is still symmetric
+                if sublst[1+it] != sublst[-2+it]:
+                    sublst.remove(sublst[1+it])
+                    sublst.remove(sublst[-2+it])
+
         return len(sublst)
 
    #else: 
