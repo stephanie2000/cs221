@@ -27,14 +27,13 @@ print text
 
 
 def computePalindrome(c,lst,i):
-                    
+                 
     if len(c) == 0:
             lengths.append(0)
             return 1
     for l in range(len(lst)): #iterate through each pair starting from i
         #decide if length of substring defined by lst is even or odd
         sublst = c[i:lst[l]] #add an additional 1 due to list slicing
-        print sublst
        
         
         if sublst == sublst[::-1]:
@@ -88,10 +87,10 @@ chars = list(text)
 lengths = list()
 
 for k in dupdict:
-    print k,dupdict[k]
     for l in range(len(dupdict[k])-1):
+        print l,dupdict[k][(l+1):]
         temp = [x+1 for x in dupdict[k][(l+1):]]
-        computePalindrome(chars,temp,l)
+        computePalindrome(chars,temp,dupdict[k][l])
 
 
 #then take max of lengths to get max palindrome
