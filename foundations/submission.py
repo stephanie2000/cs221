@@ -56,7 +56,7 @@ def mutateSentences(sentence):
 
     #NOTE: we form the sentence by ensuring the last part of a pair of words is the first
     #      part of another pair of words
-
+    #####################################################
     # Takes in a list of pairs of words and returns a list that forms a sentence (similar)
     #
     # @param[in] pairs    Is a list containing a list of paired words.    
@@ -81,7 +81,7 @@ def mutateSentences(sentence):
         text.append(first)
         if indices: 
             temp = list()
-            for j in indices: #make a copy of the current sentence,before branching off 2 othr pairs
+            for j in indices: #make a copy of the current sentence,before branching off
                temp = [t for t in text]
                temp2 = addWords(pairs,text,j,n,keys)
                sentences.add(tuple(text))
@@ -93,7 +93,7 @@ def mutateSentences(sentence):
         else:
             text = list()
             return text
-   
+    ###################################################
     words = sentence.split() #split the string
 
     #make pairs of words (adjacent)
@@ -106,7 +106,7 @@ def mutateSentences(sentence):
 
     n=len(words)
         
-    sentences = set()
+    sentences = set() #don't want duplicates
     for i,pair in enumerate(pairs): #create sent. for each pair in orig sent. 
         w = list()
         addWords(pairs,w,i,n,keys) #use recursion
@@ -191,5 +191,64 @@ def computeLongestPalindromeLength(text):
     You should first define a recurrence before you start coding.
     """
     # BEGIN_YOUR_CODE (our solution is 19 lines of code, but don't worry if you deviate from this)
-    raise Exception("Not implemented yet")
+    def computePalindrome(c,lst):
+
+        #decide if length of substring defined by lst is even or odd
+        sublst = c[lst[0]:lst[1]+1]
+        if len(sublst) % 2 == 1:
+            mid = len(sublst)/2 #middle index
+            iterLen = mid - 1 #how many times to remove until we hit middle 
+            for it in range(iterLen):
+                if sublst != sublst[::-1]:
+                    #check to see if it is still symmetric
+                    if sublst[1+it] != sublst[-2+it]:
+                        sublst.remove(sublst[1+it])
+                        sublst.remove(sublst[-2-it])
+
+            return len(sublst)
+
+        else: #even
+            iterLen = (len(sublst)/2) - 1
+            for it in range(iterLen):
+                if sublst != sublst[::-1]:
+                    #check to see if moving inward pairs are equal
+                    if sublst[1+it] != sublst[-2+it]:
+                        sublst.remove(sublst[1+it])
+                        #print sublst, sublst[-2+it-1], it
+                        sublst.remove(sublst[-2-it])
+
+
+            return len(sublst)
+
+    if text == text[::-1]: return len(text)
+    if len(text) == 0: return 0
+    if len(text) == 2 and text != text[::-1]: return 1;
+    #get all the duplicates in the string
+    chars = list(text)
+    d = dict()
+    for i,c in enumerate(chars):
+         if c not in d.keys():
+             d[c] = list()
+             d[c].append(i)
+         else:
+             d[c].append(i)
+    temp = d
+    for k in temp.keys():
+        if len(d[k]) == 1:
+            d.pop(k)
+
+    #for each possible pairs of indices that chars are duplicates at-compute their palindrome
+    #between these pairs
+    #this is because palindromes need to be symmetric (have same beg. and end.)
+    lengths = list()
+    for k in d:
+        for l in range(len(d[k])-1):
+            i = d[k][l] #start of palindrome
+            j = d[k][l + 1] #end of palindrome
+            #compute palindrome for pair of indices
+            lenPal = computePalindrome(chars,list([i,j]))
+            lengths.append(lenPal)
+
+    #then take max of lengths to get max palindrome
+    return max(lengths)
     # END_YOUR_CODE
