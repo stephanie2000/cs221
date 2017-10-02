@@ -6,11 +6,12 @@ import random
 
 
 numChars = 5
-length = 20
+length = 400
 text=' '.join(chr(random.randint(ord('a'), ord('a') + numChars - 1)) for _ in range(length))
 
 def computePalLen(text,d):
-  
+    if(text in d):
+	return d[text]
     if len(text)==0: return 0
 
 
