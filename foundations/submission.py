@@ -191,64 +191,25 @@ def computeLongestPalindromeLength(text):
     You should first define a recurrence before you start coding.
     """
     # BEGIN_YOUR_CODE (our solution is 19 lines of code, but don't worry if you deviate from this)
-    def computePalindrome(c,lst):
-
-        #decide if length of substring defined by lst is even or odd
-        sublst = c[lst[0]:lst[1]+1]
-        if len(sublst) % 2 == 1:
-            mid = len(sublst)/2 #middle index
-            iterLen = mid - 1 #how many times to remove until we hit middle 
-            for it in range(iterLen):
-                if sublst != sublst[::-1]:
-                    #check to see if it is still symmetric
-                    if sublst[1+it] != sublst[-2+it]:
-                        sublst.remove(sublst[1+it])
-                        sublst.remove(sublst[-2-it])
-
-            return len(sublst)
-
-        else: #even
-            iterLen = (len(sublst)/2) - 1
-            for it in range(iterLen):
-                if sublst != sublst[::-1]:
-                    #check to see if moving inward pairs are equal
-                    if sublst[1+it] != sublst[-2+it]:
-                        sublst.remove(sublst[1+it])
-                        #print sublst, sublst[-2+it-1], it
-                        sublst.remove(sublst[-2-it])
+    def computePalLen(text,d):
+        if(text in d):
+	    return d[text]
+        if len(text)==0: return 0
 
 
-            return len(sublst)
+        if text == text[::-1]: 
+            d[text]=len(text)
 
-    if text == text[::-1]: return len(text)
-    if len(text) == 0: return 0
-    if len(text) == 2 and text != text[::-1]: return 1;
-    #get all the duplicates in the string
-    chars = list(text)
-    d = dict()
-    for i,c in enumerate(chars):
-         if c not in d.keys():
-             d[c] = list()
-             d[c].append(i)
-         else:
-             d[c].append(i)
-    temp = d
-    for k in temp.keys():
-        if len(d[k]) == 1:
-            d.pop(k)
+        elif text[0] == text[-1]:
+            d[text] = 2 + computePalLen(text[1:len(text)-1],d)
+        else:
+            d[text]= max(computePalLen(text[0:len(text)-1],d),computePalLen(text[1:len(text)],d))
 
-    #for each possible pairs of indices that chars are duplicates at-compute their palindrome
-    #between these pairs
-    #this is because palindromes need to be symmetric (have same beg. and end.)
-    lengths = list()
-    for k in d:
-        for l in range(len(d[k])-1):
-            i = d[k][l] #start of palindrome
-            j = d[k][l + 1] #end of palindrome
-            #compute palindrome for pair of indices
-            lenPal = computePalindrome(chars,list([i,j]))
-            lengths.append(lenPal)
 
-    #then take max of lengths to get max palindrome
-    return max(lengths)
+        return d[text]
+
+
+    dictPal = dict()
+
+    return computePalLen(text,dictPal)
     # END_YOUR_CODE
