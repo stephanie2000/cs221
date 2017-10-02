@@ -18,7 +18,7 @@ import random
 #text="a"
 #text="aa"
 #text="ab"
-#text = "animal"
+#text = "abcabaa"
 
 numChars = 10
 length = 10
@@ -27,39 +27,40 @@ print text
 
 
 def computePalindrome(c,lst,i):
-    
+
     if len(c) == 0:
             lengths.append(0)
             return 1
     for l in range(len(lst)): #iterate through each pair starting from i
         #decide if length of substring defined by lst is even or odd
         sublst = c[i:lst[l]] #add an additional 1 due to list slicing
-        print sublst
         if sublst == sublst[::-1]:
             lengths.append(len(sublst))
             break
         if len(sublst)==3 or len(sublst)==2:
             lengths.append(1)
             break
-        if len(sublst) % 2 == 1: #odd iteration
-            mid = len(sublst)/2 #middle index
-            iterLen = mid - 1 #how many times to remove until we hit middle 
-        else:
-            iterLen = (len(sublst)/2) - 1 
+        iterLen = (len(sublst)/2) - 1 
+        #print iterLen
         for it in range(iterLen):
+            print iterLen, it, sublst
+            if it > (iterLen-1): break
             if sublst != sublst[::-1]:
                 #check to see if it is still symmetric
-                if sublst[1+it] != sublst[-2+it]:
+                #print sublst, "-",1+it,"-",-2-it,"-",-2+it, "IT: ",it,"ITER ", iterLen
+                if sublst[1+it] != sublst[-2-it]:
                     temp = list()
                     temp = [x for x in sublst]
                     temp.pop(1+it)
 	            computePalindrome(temp,[len(temp)],0) # it is now an even case
                     temp =  [x for x in sublst]
+                    #print -2-it, " ", temp
                     temp.pop(-2-it)
                     computePalindrome(temp,[len(temp)],0) # it is now an even case
-                    sublst.pop(1+it)
+                   # print sublst," ",sublst[1+it], "-",sublst[-2+it]
                     sublst.pop(-2-it)
-
+                    sublst.pop(1+it)
+                    #print sublst
 
 
 
